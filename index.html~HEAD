@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title></title>
+	<style type="text/css">
+		html, body {
+			margin: 0;
+			width: 100%;
+			background-color: black;
+		}
+		body {
+			background: url(dark-triangles/dark-triangles.png);
+		}
+		div.title {
+			text-align: center;
+		}
+		.title h1{
+			margin: 0;
+			color: white;
+			text-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+		}
+
+		canvas {
+			margin: 0 auto;
+			position: relative;
+			top: 50%;
+			left: 50%;
+			transform: translate(-50%);	
+			border-radius: 20px;		
+		}
+
+		footer {
+
+			padding: 20px 20px;
+			margin: 0 auto;
+			width: 60%;
+			position: relative;
+			text-align: center;
+			color: #9E9E9E;
+			text-shadow: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+
+			background-color: rgba(123, 31, 162, 0.4);
+
+
+
+		}
+		footer::after {
+			content: "";
+			display:table;
+			clear: both;
+		}
+
+
+		footer p {
+			margin: 0;
+
+		}
+	</style>
+</head>
+<body>
+	<div class="title">
+		<h1>First Pong Game!</h1>
+	</div>
+
+
+	<canvas id="gameCanvas" width="800" height="600"></canvas>
+
+
+	<footer>
+		<p>
+			Props go out to: subtlepatterns.com for the awesome background and Chris DeLeon for his fantastic free Udemy Course
+		</p>
+	</footer>
+
+	<script type="text/javascript">
+
+	var canvas;
+	var canvasContext;
+	var ballX = 50;
+	var ballSpeedX = 15;
+	var framesPerSecond = 30;
+	var ballY = 50;
+	var ballSpeedY = 15;
+	
+
+	var paddle1Y = 150;
+	const PADDLE_HEIGHT = 100;
+
+
+    //ball: circle
+	var centerX = 10;
+	var centerY = 10;
+	var radius = 1;
+
+		function ballReset(){
+			ballSpeedX = -ballSpeedX;
+			ballX = canvas.width/2;
+			ballY = canvas.height/2;
+		}
+		function calculateMousePos(evt){
+			var rect = canvas.getBoundingClientRect();
+			var root = document.documentElement;
+			var mouseX = evt.clientX - rect.left - root.scrollLeft;
+			var mouseY = evt.clientY - rect.top - root.scrollTop;
+			return {
+				x: mouseX,
+				y: mouseY
+			};
+		}
+
+		function moveEverything(){
+			ballX = ballX + ballSpeedX;
+			if(ballX < 0){
+				if(ballY > paddle1Y && ballY < paddle1Y+PADDLE_HEIGHT){
+					ballSpeedX = -ballSpeedX;
+				}else{
+					ballReset();
+				}
+			}
+			//Horizontal Movement
+
+			//Right side
+			if(ballX > canvas.width){
+				
+				
+			};
+			//Left side
+			if(ballX < 0){
+				// ballSpeedX = -ballSpeedX;
+			};
+
+			// Vertical Movement
+
+			ballY = ballY + ballSpeedY;
+
+			//Topside
+			if(ballY > canvas.height){
+				ballSpeedY = -ballSpeedY;
+			};
+			//Bottomside
+			if(ballY < 0){
+				ballSpeedY = -ballSpeedY;
+			};
+
+
+
+
+		};// End moveEverything();
+
+		function drawEverything(){
+			
+			//background
+			canvasContext.fillStyle = "#212121";
+			canvasContext.fillRect(0,0,canvas.width,canvas.height);
+
+			// Ball
+			// colorRect(ballX,100,10,10,"white");
+			// Need a circle
+			canvasContext.fillStyle = "white";
+			canvasContext.beginPath();
+			canvasContext.arc(ballX, ballY, 10, 0, Math.PI * 2, true);
+			canvasContext.fill();
+
+
+			// Player 1: Green Paddle
+			colorRect(10,paddle1Y,10,100,"#00E676");
+			// Player 2: Red Paddle
+			colorRect(780, canvas.height/2 - 25, 10, PADDLE_HEIGHT,"#ff1744");
+		};
+
+
+		function colorRect(leftX, topY, width, height, drawColor){
+			canvasContext.fillStyle = drawColor;
+			canvasContext.fillRect(leftX, topY, width, height);
+		};
+
+		window.onload = function(){
+			canvas = document.getElementById("gameCanvas");
+			canvasContext = canvas.getContext("2d");
+			setInterval(function(){
+				drawEverything();
+				moveEverything();
+			}, 1000/framesPerSecond);
+
+
+			canvas.addEventListener("mousemove",function(evt){
+				var mousePos = calculateMousePos(evt);
+				paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
+			},false);
+		};
+	</script>
+</body>
+</html>
