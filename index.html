@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
 	<title></title>
 	<style type="text/css">
 		html, body {
@@ -79,75 +77,18 @@
 	var canvas;
 	var canvasContext;
 	var ballX = 50;
-	var ballSpeedX = 15;
+	var ballSpeedX = 5;
 	var framesPerSecond = 30;
-	var ballY = 50;
-	var ballSpeedY = 15;
-	
-
-	var paddle1Y = 150;
-	const PADDLE_HEIGHT = 100;
 
 
-    //ball: circle
 	var centerX = 10;
 	var centerY = 10;
 	var radius = 1;
 
-		function ballReset(){
-			ballSpeedX = -ballSpeedX;
-			ballX = canvas.width/2;
-			ballY = canvas.height/2;
-		}
-		function calculateMousePos(evt){
-			var rect = canvas.getBoundingClientRect();
-			var root = document.documentElement;
-			var mouseX = evt.clientX - rect.left - root.scrollLeft;
-			var mouseY = evt.clientY - rect.top - root.scrollTop;
-			return {
-				x: mouseX,
-				y: mouseY
-			};
-		}
-
 		function moveEverything(){
 			ballX = ballX + ballSpeedX;
-			if(ballX < 0){
-				if(ballY > paddle1Y && ballY < paddle1Y+PADDLE_HEIGHT){
-					ballSpeedX = -ballSpeedX;
-				}else{
-					ballReset();
-				}
-			}
-			//Horizontal Movement
 
-			//Right side
-			if(ballX > canvas.width){
-				
-				
-			};
-			//Left side
-			if(ballX < 0){
-				// ballSpeedX = -ballSpeedX;
-			};
-
-			// Vertical Movement
-
-			ballY = ballY + ballSpeedY;
-
-			//Topside
-			if(ballY > canvas.height){
-				ballSpeedY = -ballSpeedY;
-			};
-			//Bottomside
-			if(ballY < 0){
-				ballSpeedY = -ballSpeedY;
-			};
-
-
-
-
-		};// End moveEverything();
+		};
 
 		function drawEverything(){
 			
@@ -156,40 +97,35 @@
 			canvasContext.fillRect(0,0,canvas.width,canvas.height);
 
 			// Ball
-			// colorRect(ballX,100,10,10,"white");
-			// Need a circle
 			canvasContext.fillStyle = "white";
-			canvasContext.beginPath();
-			canvasContext.arc(ballX, ballY, 10, 0, Math.PI * 2, true);
-			canvasContext.fill();
+			
+			canvasContext.fillRect(ballX,100,10,10);
+			//canvasContext.arc(centerX, centerY, radius, 0, 2 * Math.PI, false);
 
 
 			// Player 1: Green Paddle
-			colorRect(10,paddle1Y,10,100,"#00E676");
+			canvasContext.fillStyle = "#00E676";
+			canvasContext.fillRect(10,canvas.height/2 - 25,10,100);
+			
 			// Player 2: Red Paddle
-			colorRect(780, canvas.height/2 - 25, 10, PADDLE_HEIGHT,"#ff1744");
+			canvasContext.fillStyle = "#ff1744";
+			canvasContext.fillRect(780, canvas.height/2 - 25, 10, 100);
+
+			
 		};
 
-
-		function colorRect(leftX, topY, width, height, drawColor){
-			canvasContext.fillStyle = drawColor;
-			canvasContext.fillRect(leftX, topY, width, height);
-		};
 
 		window.onload = function(){
 			canvas = document.getElementById("gameCanvas");
 			canvasContext = canvas.getContext("2d");
 			setInterval(function(){
+				
 				drawEverything();
 				moveEverything();
+
 			}, 1000/framesPerSecond);
 
-
-			canvas.addEventListener("mousemove",function(evt){
-				var mousePos = calculateMousePos(evt);
-				paddle1Y = mousePos.y - (PADDLE_HEIGHT/2);
-			},false);
-		};
+		}
 	</script>
 </body>
 </html>
